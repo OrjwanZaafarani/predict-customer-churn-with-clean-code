@@ -83,18 +83,22 @@ def encoder_helper(df, category_lst):
         return df
 
 
-def perform_feature_engineering(df, response):
-    '''
-    input:
-              df: pandas dataframe
-              response: string of response name [optional argument that could be used for naming variables or index y column]
+def perform_feature_engineering(df):
+        '''
+        input:
+                df: pandas dataframe
+  
+        output:
+                X_train: X training data
+                X_test: X testing data
+                y_train: y training data
+                y_test: y testing data
+        '''
+        X = pd.DataFrame()
+        X[keep_cols] = df[keep_cols]
+        y = df['Churn']
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size= 0.3, random_state=42)
 
-    output:
-              X_train: X training data
-              X_test: X testing data
-              y_train: y training data
-              y_test: y testing data
-    '''
 
 def classification_report_image(y_train,
                                 y_test,
