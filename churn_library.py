@@ -65,7 +65,7 @@ def perform_eda(df):
         plt.savefig("images/Correlation_Heatmap.png")
 
 
-def encoder_helper(df, category_lst, response):
+def encoder_helper(df, category_lst):
         '''
         helper function to turn each categorical column into a new column with
         propotion of churn for each category - associated with cell 15 from the notebook
@@ -73,8 +73,7 @@ def encoder_helper(df, category_lst, response):
         input:
                 df: pandas dataframe
                 category_lst: list of columns that contain categorical features
-                response: string of response name [optional argument that could be used for naming variables or index y column]
-
+ 
         output:
                 df: pandas dataframe with new columns for
         '''
