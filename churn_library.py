@@ -47,26 +47,20 @@ def perform_eda(df):
         output:
                 None
         '''
+
         plt.figure(figsize=(20,10)) 
-        df['Churn'].hist()
-        plt.savefig("images/Churn.png")
-
-        plt.cla()
-        df['Customer_Age'].hist()
-        plt.savefig("images/Customer_Age.png")
-
-        plt.cla()
-        df.Marital_Status.value_counts('normalize').plot(kind='bar')
-        plt.savefig("images/Martial_Status.png")
-
-        plt.cla()
-        # distplot is deprecated. Use histplot instead
-        # sns.distplot(df['Total_Trans_Ct']);
-        # Show distributions of 'Total_Trans_Ct' and add a smooth curve obtained using a kernel density estimate
-        sns.histplot(df['Total_Trans_Ct'], stat='density', kde=True);
-        plt.savefig("images/Total_Trans_Ct.png")
-
-        plt.cla()
+        for column_name in ["Churn", "Customer_Age", "Martial_Status", "Total_Trans_Ct"]:
+                if (column_name == "Churn") or (column_name == "Customer_Age"):
+                        df[column_name].hist()
+                elif column_name == "Marital_Status":
+                        df.column_name.value_counts('normalize').plot(kind='bar')
+                elif column_name == "Total_Trans_Ct":
+                        # distplot is deprecated. Use histplot instead
+                        # sns.distplot(df['Total_Trans_Ct']);
+                        # Show distributions of 'Total_Trans_Ct' and add a smooth curve obtained using a kernel density estimate
+                        sns.histplot(df[column_name], stat='density', kde=True)  
+                plt.savefig("images/" + column_name + ".png")
+                plt.cla()
         sns.heatmap(df.corr(), annot=False, cmap='Dark2_r', linewidths = 2)
         plt.savefig("images/Correlation_Heatmap.png")
 
