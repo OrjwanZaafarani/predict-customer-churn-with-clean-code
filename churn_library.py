@@ -98,6 +98,7 @@ def perform_feature_engineering(df):
         X[keep_cols] = df[keep_cols]
         y = df['Churn']
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size= 0.3, random_state=42)
+        return X_train, X_test, y_train, y_test
 
 
 def classification_report_image(y_train,
