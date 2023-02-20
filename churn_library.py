@@ -107,21 +107,42 @@ def classification_report_image(y_train,
                                 y_train_preds_rf,
                                 y_test_preds_lr,
                                 y_test_preds_rf):
-    '''
-    produces classification report for training and testing results and stores report as image
-    in images folder
-    input:
-            y_train: training response values
-            y_test:  test response values
-            y_train_preds_lr: training predictions from logistic regression
-            y_train_preds_rf: training predictions from random forest
-            y_test_preds_lr: test predictions from logistic regression
-            y_test_preds_rf: test predictions from random forest
+        '''
+        produces classification report for training and testing results and stores report as image
+        in images folder
+        input:
+                y_train: training response values
+                y_test:  test response values
+                y_train_preds_lr: training predictions from logistic regression
+                y_train_preds_rf: training predictions from random forest
+                y_test_preds_lr: test predictions from logistic regression
+                y_test_preds_rf: test predictions from random forest
 
-    output:
-             None
-    '''
-    pass
+        output:
+                None
+        '''
+
+        classification_reports = []
+        classification_reports.append(classification_report(y_test, y_test_preds_rf))
+        classification_reports.append(classification_report(y_train, y_train_preds_rf))
+        classification_reports.append(classification_report(y_test, y_test_preds_lr))
+        classification_reports.append(classification_report(y_train, y_train_preds_lr))
+    
+        model_names_list = ["Random Forest Test", "Random Forest Train", "Logistic Regression Test", "Logistic Regression Train"]
+        
+        
+        plt.rc('figure', figsize=(5, 5))
+        x_coordinate = 0.01
+        y1_coordinate = 0.6
+        y2_coordinate = 0.05
+        for report, model_name in zip(classification_reports, model_names_list):
+                plt.text(x_coordinate, y1_coordinate, str(model_name), {'fontsize': 10}, fontproperties = 'monospace')
+                plt.text(x_coordinate, y2_coordinate, str(report), {'fontsize': 10}, fontproperties = 'monospace') # approach improved by OP -> monospace!
+                y1_coordinate += 0.65
+                y2_coordinate += 0.65
+        plt.axis('off')
+        plt.savefig("images/Classification_Reports.png")
+        
 
 
 def feature_importance_plot(model, X_data, output_pth):
