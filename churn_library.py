@@ -146,17 +146,40 @@ def classification_report_image(y_train,
 
 
 def feature_importance_plot(model, X_data, output_pth):
-    '''
-    creates and stores the feature importances in pth
-    input:
-            model: model object containing feature_importances_
-            X_data: pandas dataframe of X values
-            output_pth: path to store the figure
+        '''
+        creates and stores the feature importances in pth
+        input:
+                model: model object containing feature_importances_
+                X_data: pandas dataframe of X values
+                output_pth: path to store the figure
 
-    output:
-             None
-    '''
-    pass
+        output:
+                None
+        '''
+        # Calculate feature importances
+        importances = model.feature_importances_
+
+        # Sort feature importances in descending order
+        indices = np.argsort(importances)[::-1]
+
+        # Rearrange feature names so they match the sorted feature importances
+        names = [X_data.columns[i] for i in indices]
+
+        # Create plot
+        plt.figure(figsize=(20,5))
+
+        # Create plot title
+        plt.title("Feature Importance")
+        plt.ylabel('Importance')
+
+        # Add bars
+        plt.bar(range(X_data.shape[1]), importances[indices])
+
+        # Add feature names as x-axis labels
+        plt.xticks(range(X_data.shape[1]), names, rotation=90)
+
+        plt.savefig(output_pth)
+        
 
 def train_models(X_train, X_test, y_train, y_test):
     '''
