@@ -1,3 +1,5 @@
+'''This module tests all the functions in churn_library.py'''
+
 import os
 import logging
 import churn_library_solution as cls

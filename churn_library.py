@@ -21,7 +21,7 @@ from sklearn.model_selection import GridSearchCV
 
 from sklearn.metrics import plot_roc_curve, classification_report
 
-from parameters import *
+from constants import *
 
 
 def import_data(pth):
@@ -179,17 +179,54 @@ def feature_importance_plot(model, X_data, output_pth):
         plt.xticks(range(X_data.shape[1]), names, rotation=90)
 
         plt.savefig(output_pth)
-        
+
 
 def train_models(X_train, X_test, y_train, y_test):
-    '''
-    train, store model results: images + scores, and store models
-    input:
-              X_train: X training data
-              X_test: X testing data
-              y_train: y training data
-              y_test: y testing data
-    output:
-              None
-    '''
-    pass
+        '''
+        train, store model results: images + scores, and store models
+        input:
+                X_train: X training data
+                X_test: X testing data
+                y_train: y training data
+                y_test: y testing data
+        output:
+                None
+        '''
+        
+        # grid search
+        rfc = RandomForestClassifier(random_state=42)
+        # Use a different solver if the default 'lbfgs' fails to converge
+        # Reference: https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+        lrc = LogisticRegression(solver='lbfgs', max_iter=3000)
+
+        param_grid = { 
+        'n_estimators': [200, 500],
+        'max_features': ['auto', 'sqrt'],
+        'max_depth' : [4,5,100],
+        'criterion' :['gini', 'entropy']
+        }
+
+        cv_rfc = GridSearchCV(estimator=rfc, param_grid=param_grid, cv=5)
+        cv_rfc.fit(X_train, y_train)
+
+        lrc.fit(X_train, y_train)
+
+        lrc_plot = plot_roc_curve(lrc, X_test, y_test)
+        plt.savefig("images/ROC_Curve.png")
+
+        # plots
+        plt.figure(figsize=(15, 8))
+        ax = plt.gca()
+        rfc_disp = plot_roc_curve(cv_rfc.best_estimator_, X_test, y_test, ax=ax, alpha=0.8)
+        lrc_plot.plot(ax=ax, alpha=0.8)
+        plt.savefig("images/ROC_Curve_Both_Models.png")
+
+        explainer = shap.TreeExplainer(cv_rfc.best_estimator_)
+        shap_values = explainer.shap_values(X_test)
+        shap.summary_plot(shap_values, X_test, plot_type="bar")
+        plt.savefig("images/Tree_Explainer.png")
+
+        # save best model
+        joblib.dump(cv_rfc.best_estimator_, './models/rfc_model.pkl')
+        joblib.dump(lrc, './models/logistic_model.pkl')
+
