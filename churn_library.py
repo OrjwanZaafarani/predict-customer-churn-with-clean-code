@@ -127,9 +127,6 @@ def classification_report_image(y_train,
         classification_reports.append(classification_report(y_train, y_train_preds_rf))
         classification_reports.append(classification_report(y_test, y_test_preds_lr))
         classification_reports.append(classification_report(y_train, y_train_preds_lr))
-    
-        model_names_list = ["Random Forest Test", "Random Forest Train", "Logistic Regression Test", "Logistic Regression Train"]
-        
         
         plt.rc('figure', figsize=(5, 5))
         x_coordinate = 0.01
@@ -157,7 +154,7 @@ def feature_importance_plot(model, X_data, output_pth):
                 None
         '''
         # Calculate feature importances
-        importances = model.feature_importances_
+        importances = model.best_estimator_.feature_importances_
 
         # Sort feature importances in descending order
         indices = np.argsort(importances)[::-1]
@@ -230,3 +227,74 @@ def train_models(X_train, X_test, y_train, y_test):
         joblib.dump(cv_rfc.best_estimator_, './models/rfc_model.pkl')
         joblib.dump(lrc, './models/logistic_model.pkl')
 
+        return cv_rfc, lrc
+
+
+def model_prediction(cv_rfc, lrc, X_train, X_test):
+        '''
+        input:
+                cv_rfc: random forest model
+                lrc: logistic regression model
+                X_train: X training data
+                X_test: X testing data
+ 
+        output:
+                y_train_preds_rf: training predictions from random forest
+                y_test_preds_rf: test predictions from random forest
+                y_train_preds_lr: training predictions from logistic regression
+                y_test_preds_lr: test predictions from logistic regression
+        '''
+        y_train_preds_rf = cv_rfc.best_estimator_.predict(X_train)
+        y_test_preds_rf = cv_rfc.best_estimator_.predict(X_test)
+
+        y_train_preds_lr = lrc.predict(X_train)
+        y_test_preds_lr = lrc.predict(X_test)
+
+        return y_train_preds_rf, y_test_preds_rf, y_train_preds_lr, y_test_preds_lr
+
+
+def prepare_xdata(df):
+        """
+        helper function for preparing X_data from the dataframe
+        
+        input:
+                df: the dataset dataframe
+
+        output:
+                X_data: a dataframe containing only the columns specified in keep_cols
+        """
+        X_data = pd.DataFrame()
+        X_data[keep_cols] = df[keep_cols]
+
+        return X_data
+
+
+if __name__=="__main__":
+
+        df = import_data(dataset_path)
+        perform_eda(df)
+        df = encoder_helper(df, cat_columns)
+        X_train, X_test, y_train, y_test = perform_feature_engineering(df)
+        cv_rfc, lrc = train_models(X_train, X_test, y_train, y_test)
+        y_train_preds_rf, y_test_preds_rf, y_train_preds_lr, y_test_preds_lr = model_prediction(cv_rfc, lrc, X_train, X_test)
+        classification_report_image(y_train,
+                                y_test,
+                                y_train_preds_lr,
+                                y_train_preds_rf,
+                                y_test_preds_lr,
+                                y_test_preds_rf)
+        
+        X_data = prepare_xdata(df)
+        feature_importance_plot(cv_rfc, X_data, feature_importance_path)
+
+
+
+
+
+
+
+# Comments      
+# """" -- done
+# paths to constants.py
+# unit tests
+# Readme

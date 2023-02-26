@@ -1,4 +1,5 @@
-dataset_path = r"./data/bank_data.csv"
+# Lists
+# ------------
 keep_cols = ['Customer_Age', 'Dependent_count', 'Months_on_book',
         'Total_Relationship_Count', 'Months_Inactive_12_mon',
         'Contacts_Count_12_mon', 'Credit_Limit', 'Total_Revolving_Bal',
@@ -6,3 +7,18 @@ keep_cols = ['Customer_Age', 'Dependent_count', 'Months_on_book',
         'Total_Trans_Ct', 'Total_Ct_Chng_Q4_Q1', 'Avg_Utilization_Ratio',
         'Gender_Churn', 'Education_Level_Churn', 'Marital_Status_Churn', 
         'Income_Category_Churn', 'Card_Category_Churn']
+
+model_names_list = ["Random Forest Test", "Random Forest Train", "Logistic Regression Test", "Logistic Regression Train"]
+
+cat_columns = [
+    'Gender',
+    'Education_Level',
+    'Marital_Status',
+    'Income_Category',
+    'Card_Category'                
+]
+
+# Paths
+# ------------
+dataset_path = "data/bank_data.csv"
+feature_importance_path = "images/Feature_Importance.png"
