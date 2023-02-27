@@ -59,10 +59,10 @@ def perform_eda(df):
                         # sns.distplot(df['Total_Trans_Ct']);
                         # Show distributions of 'Total_Trans_Ct' and add a smooth curve obtained using a kernel density estimate
                         sns.histplot(df[column_name], stat='density', kde=True)  
-                plt.savefig("images/" + column_name + ".png")
+                plt.savefig(images_eda_path + column_name + ".png")
                 plt.cla()
         sns.heatmap(df.corr(), annot=False, cmap='Dark2_r', linewidths = 2)
-        plt.savefig("images/Correlation_Heatmap.png")
+        plt.savefig(correlation_heatmap_path)
 
 
 def encoder_helper(df, category_lst):
@@ -78,7 +78,7 @@ def encoder_helper(df, category_lst):
                 df: pandas dataframe with new columns for
         '''
         for category in category_lst:
-                df.merge(df.groupby(category).mean()["Churn"], how='left', on=category, \
+                df = df.merge(df.groupby(category).mean()["Churn"], how='left', on=category, \
                         suffixes = (None, "_" + category))
         return df
 
@@ -128,7 +128,7 @@ def classification_report_image(y_train,
         classification_reports.append(classification_report(y_test, y_test_preds_lr))
         classification_reports.append(classification_report(y_train, y_train_preds_lr))
         
-        plt.rc('figure', figsize=(5, 5))
+        plt.rc('figure', figsize=(15, 15))
         x_coordinate = 0.01
         y1_coordinate = 0.6
         y2_coordinate = 0.05
@@ -138,7 +138,7 @@ def classification_report_image(y_train,
                 y1_coordinate += 0.65
                 y2_coordinate += 0.65
         plt.axis('off')
-        plt.savefig("images/Classification_Reports.png")
+        plt.savefig(classification_report_path)
         
 
 
@@ -209,23 +209,24 @@ def train_models(X_train, X_test, y_train, y_test):
         lrc.fit(X_train, y_train)
 
         lrc_plot = plot_roc_curve(lrc, X_test, y_test)
-        plt.savefig("images/ROC_Curve.png")
+        plt.savefig(roc_curve_path)
 
         # plots
         plt.figure(figsize=(15, 8))
         ax = plt.gca()
         rfc_disp = plot_roc_curve(cv_rfc.best_estimator_, X_test, y_test, ax=ax, alpha=0.8)
         lrc_plot.plot(ax=ax, alpha=0.8)
-        plt.savefig("images/ROC_Curve_Both_Models.png")
+        plt.savefig(roc_curve_both_models_path)
 
+        plt.figure(figsize=(15, 8))
         explainer = shap.TreeExplainer(cv_rfc.best_estimator_)
         shap_values = explainer.shap_values(X_test)
         shap.summary_plot(shap_values, X_test, plot_type="bar")
-        plt.savefig("images/Tree_Explainer.png")
+        plt.savefig(tree_explainer_path)
 
         # save best model
-        joblib.dump(cv_rfc.best_estimator_, './models/rfc_model.pkl')
-        joblib.dump(lrc, './models/logistic_model.pkl')
+        joblib.dump(cv_rfc.best_estimator_, rfc_model_path)
+        joblib.dump(lrc, lrc_model_path)
 
         return cv_rfc, lrc
 
@@ -275,7 +276,9 @@ if __name__=="__main__":
         perform_eda(df)
         df = encoder_helper(df, cat_columns)
         X_train, X_test, y_train, y_test = perform_feature_engineering(df)
+        print("BEGIN TRAINING")
         cv_rfc, lrc = train_models(X_train, X_test, y_train, y_test)
+        print("FINISHED TRAINING")
         y_train_preds_rf, y_test_preds_rf, y_train_preds_lr, y_test_preds_lr = model_prediction(cv_rfc, lrc, X_train, X_test)
         classification_report_image(y_train,
                                 y_test,
@@ -295,6 +298,12 @@ if __name__=="__main__":
 
 # Comments      
 # """" -- done
-# paths to constants.py
+# images/eda -- done
+# images results -- done
+# paths to constants.py -- done
 # unit tests
 # Readme
+# Logging
+# tree explainer bug
+
+

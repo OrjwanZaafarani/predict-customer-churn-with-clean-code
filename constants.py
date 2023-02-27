@@ -5,8 +5,8 @@ keep_cols = ['Customer_Age', 'Dependent_count', 'Months_on_book',
         'Contacts_Count_12_mon', 'Credit_Limit', 'Total_Revolving_Bal',
         'Avg_Open_To_Buy', 'Total_Amt_Chng_Q4_Q1', 'Total_Trans_Amt',
         'Total_Trans_Ct', 'Total_Ct_Chng_Q4_Q1', 'Avg_Utilization_Ratio',
-        'Gender_Churn', 'Education_Level_Churn', 'Marital_Status_Churn', 
-        'Income_Category_Churn', 'Card_Category_Churn']
+        'Churn_Gender', 'Churn_Education_Level', 'Churn_Marital_Status', 
+        'Churn_Income_Category', 'Churn_Card_Category']
 
 model_names_list = ["Random Forest Test", "Random Forest Train", "Logistic Regression Test", "Logistic Regression Train"]
 
@@ -20,5 +20,18 @@ cat_columns = [
 
 # Paths
 # ------------
+
+# Images
 dataset_path = "data/bank_data.csv"
-feature_importance_path = "images/Feature_Importance.png"
+images_results_path = "images/results/"
+images_eda_path = "images/eda/"
+feature_importance_path = images_results_path + "Feature_Importance.png"
+correlation_heatmap_path = images_eda_path + "Correlation_Heatmap.png"
+classification_report_path = images_results_path + "Classification_Reports.png"
+roc_curve_path = images_results_path + "ROC_Curve.png"
+roc_curve_both_models_path = images_results_path + "ROC_Curve_Both_Models.png"
+tree_explainer_path = images_results_path + "Tree_Explainer.png"
+# Models
+rfc_model_path = 'models/rfc_model.pkl'
+lrc_model_path = 'models/logistic_model.pkl'
+
