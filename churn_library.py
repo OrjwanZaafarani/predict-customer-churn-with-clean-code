@@ -49,11 +49,11 @@ def perform_eda(df):
         '''
 
         plt.figure(figsize=(20,10)) 
-        for column_name in ["Churn", "Customer_Age", "Martial_Status", "Total_Trans_Ct"]:
+        for column_name in ["Churn", "Customer_Age", "Marital_Status", "Total_Trans_Ct"]:
                 if (column_name == "Churn") or (column_name == "Customer_Age"):
                         df[column_name].hist()
                 elif column_name == "Marital_Status":
-                        df.column_name.value_counts('normalize').plot(kind='bar')
+                        df[column_name].value_counts('normalize').plot(kind='bar')
                 elif column_name == "Total_Trans_Ct":
                         # distplot is deprecated. Use histplot instead
                         # sns.distplot(df['Total_Trans_Ct']);
@@ -122,24 +122,22 @@ def classification_report_image(y_train,
                 None
         '''
 
-        classification_reports = []
-        classification_reports.append(classification_report(y_test, y_test_preds_rf))
-        classification_reports.append(classification_report(y_train, y_train_preds_rf))
-        classification_reports.append(classification_report(y_test, y_test_preds_lr))
-        classification_reports.append(classification_report(y_train, y_train_preds_lr))
-        
-        plt.rc('figure', figsize=(15, 15))
-        x_coordinate = 0.01
-        y1_coordinate = 0.6
-        y2_coordinate = 0.05
-        for report, model_name in zip(classification_reports, model_names_list):
-                plt.text(x_coordinate, y1_coordinate, str(model_name), {'fontsize': 10}, fontproperties = 'monospace')
-                plt.text(x_coordinate, y2_coordinate, str(report), {'fontsize': 10}, fontproperties = 'monospace') # approach improved by OP -> monospace!
-                y1_coordinate += 0.65
-                y2_coordinate += 0.65
+        plt.figure(figsize=(10,5))
+        plt.text(0.01, 1.25, str('Logistic Regression Train'), {'fontsize': 10}, fontproperties = 'monospace')
+        plt.text(0.01, 0.05, str(classification_report(y_train, y_train_preds_lr)), {'fontsize': 10}, fontproperties = 'monospace') # approach improved by OP -> monospace!
+        plt.text(0.01, 0.6, str('Logistic Regression Test'), {'fontsize': 10}, fontproperties = 'monospace')
+        plt.text(0.01, 0.7, str(classification_report(y_test, y_test_preds_lr)), {'fontsize': 10}, fontproperties = 'monospace') # approach improved by OP -> monospace!
         plt.axis('off')
-        plt.savefig(classification_report_path)
-        
+        plt.savefig(classification_report_lr_path)
+
+        plt.figure(figsize=(10,5))
+        plt.text(0.01, 1.25, str('Random Forest Train'), {'fontsize': 10}, fontproperties = 'monospace')
+        plt.text(0.01, 0.05, str(classification_report(y_train, y_train_preds_rf)), {'fontsize': 10}, fontproperties = 'monospace') # approach improved by OP -> monospace!
+        plt.text(0.01, 0.6, str('Random Forest Test'), {'fontsize': 10}, fontproperties = 'monospace')
+        plt.text(0.01, 0.7, str(classification_report(y_test, y_test_preds_rf)), {'fontsize': 10}, fontproperties = 'monospace') # approach improved by OP -> monospace!
+        plt.axis('off')
+        plt.savefig(classification_report_rf_path)
+                
 
 
 def feature_importance_plot(model, X_data, output_pth):
@@ -163,7 +161,7 @@ def feature_importance_plot(model, X_data, output_pth):
         names = [X_data.columns[i] for i in indices]
 
         # Create plot
-        plt.figure(figsize=(20,5))
+        plt.figure(figsize=(20,20))
 
         # Create plot title
         plt.title("Feature Importance")
@@ -218,10 +216,10 @@ def train_models(X_train, X_test, y_train, y_test):
         lrc_plot.plot(ax=ax, alpha=0.8)
         plt.savefig(roc_curve_both_models_path)
 
-        plt.figure(figsize=(15, 8))
+        plt.figure(figsize=(15, 15))
         explainer = shap.TreeExplainer(cv_rfc.best_estimator_)
         shap_values = explainer.shap_values(X_test)
-        shap.summary_plot(shap_values, X_test, plot_type="bar")
+        shap.summary_plot(shap_values, X_test, plot_type="bar", show=False)
         plt.savefig(tree_explainer_path)
 
         # save best model
@@ -304,6 +302,8 @@ if __name__=="__main__":
 # unit tests
 # Readme
 # Logging
-# tree explainer bug
+# tree explainer bug -- done
+# martial status bug -- done
+# classification reports bug
 
 
