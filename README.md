@@ -7,6 +7,7 @@ The project includes a Python package for a machine learning project that follow
 Also, It introduces a problem data scientists across companies face all the time. How do we identify (and later intervene with) customers who are likely to churn?
 
 The following diagram _(Source: Udacity)_ illustrates the sequence diagram of the project:
+
 ![image](./images/sequencediagram.jpeg)
 
 ## Files and data description
