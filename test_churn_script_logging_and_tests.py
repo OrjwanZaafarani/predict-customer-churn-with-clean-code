@@ -27,10 +27,29 @@ def df():
 	return df
 
 @pytest.fixture(scope="module")
-def training_testing_split(df):
-	X_train, X_test, y_train, y_test = perform_feature_engineering(df)
-	return X_train, X_test, y_train, y_test
+def encoder(df):
+	return encoder_helper(df, cat_columns)
 
+
+@pytest.fixture(scope="module")
+def X_train(encoder):
+	X_train, _, _, _ = perform_feature_engineering(encoder)
+	return X_train
+
+@pytest.fixture(scope="module")
+def X_test(encoder):
+	_, X_test, _, _ = perform_feature_engineering(encoder)
+	return X_test
+
+@pytest.fixture(scope="module")
+def y_train(encoder):
+	_, _, y_train, _ = perform_feature_engineering(encoder)
+	return y_train
+
+@pytest.fixture(scope="module")
+def y_test(encoder):
+	_, _, _, y_test = perform_feature_engineering(encoder)
+	return y_test
 
 ####### Unit tests #######
 @pytest.mark.parametrize("filename",
@@ -85,7 +104,7 @@ def test_encoder_helper(categorical_columns, df):
 	try:
 		assert all([item in df.columns for item in categorical_columns])
 		try:
-			encoded_df = encoder_helper(df, categorical_columns)
+			_ = encoder_helper(df, categorical_columns)
 			logging.info("Testing encoder_helper: SUCCESS")
 		except Exception as ex:
 			logging.error("Testing encoder_helper: ERROR - the exception was " + str(ex))
@@ -94,14 +113,14 @@ def test_encoder_helper(categorical_columns, df):
 		raise err
 
 
-def test_perform_feature_engineering(df, keep_cols):
+def test_perform_feature_engineering(encoder):
 	'''
 	test perform_feature_engineering
 	'''
 	try:
-		assert all([item in df.columns for item in keep_cols])
+		assert all([item in encoder.columns for item in keep_cols])
 		try:
-			X_train, X_test, y_train, y_test = perform_feature_engineering(df)
+			_, _, _, _ = perform_feature_engineering(encoder)
 			logging.info("Testing perform_feature_engineering: SUCCESS")
 		except Exception as ex:
 			logging.error("Testing perform_feature_engineering: ERROR - the exception was " + str(ex))
@@ -110,37 +129,24 @@ def test_perform_feature_engineering(df, keep_cols):
 		raise err
 
 
-@pytest.mark.parametrize('X_train, X_test, y_train, y_test', [
-    (pytest.lazy_fixture('training_testing_split')[0], 'test'),
-    (pytest.lazy_fixture('training_testing_split')[1], 5),
-	(pytest.lazy_fixture('training_testing_split')[2], 4.3),
-	(pytest.lazy_fixture('training_testing_split')[3], None)])
 def test_train_models(X_train, X_test, y_train, y_test):
 	'''
 	test train_models
 	'''
-	assert X_train.shape[0] > 0
-	assert X_train.shape[1] > 0
-	assert X_test.shape[0] > 0
-	assert X_test.shape[1] > 0
-	assert y_train.shape[0] > 0
-	assert y_train.shape[1] > 0
-	assert y_test.shape[0] > 0
-	assert y_test.shape[1] > 0
-	# except AssertionError as ae:
-	# 	logging.error("Testing perform_feature_engineering: ERROR - the training or testing datasets' shapes are equal to zero")
-			
+	try:
+		assert X_train.shape[0] > 0
+		assert X_test.shape[0] > 0
+		assert y_train.shape[0] > 0
+		assert y_test.shape[0] > 0
+	except AssertionError as ae:
+		logging.error("Testing train_models: ERROR - the training or testing datasets' shapes are equal to zero")
+		raise ae
 
-
-if __name__ == "__main__":
-	pass
-	# test_import(import_data)
-	# test_eda(perform_eda)
-
-
-
-
-
-
+	try:
+		_, _ = train_models(X_train, X_test, y_train, y_test)
+		logging.info("Testing train_models: SUCCESS")
+	except Exception as e:
+		logging.error("Testing train_models: ERROR - The exception was " + str(e))
+		raise e
 
 
