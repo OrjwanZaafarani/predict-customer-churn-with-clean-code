@@ -47,7 +47,7 @@ The following diagram _(Source: Udacity)_ illustrates the sequence diagram of th
 ## Running Files
 1. Create a new environment `python3 -m venv mlops-p1`
 2. Access the environment `source mlops-p1/bin/activate`
-3. Install the requirements `pip install -r requirements_py3.XXXX.txt` _(choose the right requirement file depending on your Python version: 3.8 or 3.6)_
+3. Install the requirements `pip install -r requirements_py3.XXXX.txt` _(choose the right requirements file depending on your Python version: 3.8 or 3.6)_
 4. Run the library `python churn_library.py`
 5. Run the testing script `python -m pytest`
 
