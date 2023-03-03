@@ -10,6 +10,8 @@ keep_cols = ['Customer_Age', 'Dependent_count', 'Months_on_book',
 
 model_names_list = ["Random Forest Test", "Random Forest Train", "Logistic Regression Test", "Logistic Regression Train"]
 
+eda_columns = ["Churn", "Customer_Age", "Marital_Status", "Total_Trans_Ct"]
+
 cat_columns = [
     'Gender',
     'Education_Level',
@@ -27,7 +29,8 @@ images_results_path = "images/results/"
 images_eda_path = "images/eda/"
 feature_importance_path = images_results_path + "Feature_Importance.png"
 correlation_heatmap_path = images_eda_path + "Correlation_Heatmap.png"
-classification_report_path = images_results_path + "Classification_Reports.png"
+classification_report_rf_path = images_results_path + "Classification_Report_RF.png"
+classification_report_lr_path = images_results_path + "Classification_Report_LR.png"
 roc_curve_path = images_results_path + "ROC_Curve.png"
 roc_curve_both_models_path = images_results_path + "ROC_Curve_Both_Models.png"
 tree_explainer_path = images_results_path + "Tree_Explainer.png"

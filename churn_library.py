@@ -49,7 +49,7 @@ def perform_eda(df):
         '''
 
         plt.figure(figsize=(20,10)) 
-        for column_name in ["Churn", "Customer_Age", "Marital_Status", "Total_Trans_Ct"]:
+        for column_name in eda_columns:
                 if (column_name == "Churn") or (column_name == "Customer_Age"):
                         df[column_name].hist()
                 elif column_name == "Marital_Status":
@@ -304,6 +304,7 @@ if __name__=="__main__":
 # Logging
 # tree explainer bug -- done
 # martial status bug -- done
-# classification reports bug
-
+# classification reports bug -- done
+# author date
+# comments
 
