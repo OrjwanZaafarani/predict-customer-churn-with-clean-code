@@ -51,6 +51,7 @@ The following diagram _(Source: Udacity)_ illustrates the sequence diagram of th
 3. Install the requirements `pip install -r requirements_py3.XXXX.txt` _(choose the right requirements file depending on your Python version: 3.8 or 3.6)_
 4. Run the library `python churn_library.py`
 5. Run the testing script `python -m pytest`
+_(Expected output: `test_churn_script_logging_and_tests.py .F.F.F.. `)_
 
 
 

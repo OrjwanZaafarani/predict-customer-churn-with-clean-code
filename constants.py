@@ -8,8 +8,6 @@ keep_cols = ['Customer_Age', 'Dependent_count', 'Months_on_book',
         'Churn_Gender', 'Churn_Education_Level', 'Churn_Marital_Status', 
         'Churn_Income_Category', 'Churn_Card_Category']
 
-model_names_list = ["Random Forest Test", "Random Forest Train", "Logistic Regression Test", "Logistic Regression Train"]
-
 eda_columns = ["Churn", "Customer_Age", "Marital_Status", "Total_Trans_Ct"]
 
 cat_columns = [
