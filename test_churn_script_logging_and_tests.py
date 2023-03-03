@@ -64,18 +64,29 @@ def test_eda(cols_list, df):
 			perform_eda(df)
 			logging.info("Testing perform_eda: SUCCESS")
 		except Exception as ex:
-			logging.error("Testing perform_eda: ERROR - thhe exception was " + str(ex))
+			logging.error("Testing perform_eda: ERROR - the exception was " + str(ex))
 	except AssertionError as err:
 		logging.error("Testing perform_eda: ERROR - not all eda columns were in the dataframe's columns")
 		raise err
 
-		
 
-
-# def test_encoder_helper(encoder_helper):
-# 	'''
-# 	test encoder helper
-# 	'''
+@pytest.mark.parametrize("categorical_columns",
+                         [cat_columns,
+						 ['Genderrrr', 'Education_Level', 'Marital_Status', 'Income_Category', 'Card_Category']])
+def test_encoder_helper(categorical_columns, df):
+	'''
+	test encoder helper
+	'''
+	try:
+		assert all([item in df.columns for item in categorical_columns])
+		try:
+			encoder_helper(df, categorical_columns)
+			logging.info("Testing encoder_helper: SUCCESS")
+		except Exception as ex:
+			logging.error("Testing encoder_helper: ERROR - the exception was " + str(ex))
+	except AssertionError as err:
+		logging.error("Testing encoder_helper: ERROR - not all categorical columns were in the dataframe's columns")
+		raise err
 
 
 # def test_perform_feature_engineering(perform_feature_engineering):
