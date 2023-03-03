@@ -1,5 +1,10 @@
 # library doc string
-'''This library predicts whether a customer will churn in clean code'''
+'''
+This library predicts whether a customer will churn in clean code
+
+Author: Orjuwan Zaafarani
+Date: 3/3/2023
+'''
 
 # import libraries
 import os
@@ -274,9 +279,7 @@ if __name__=="__main__":
         perform_eda(df)
         df = encoder_helper(df, cat_columns)
         X_train, X_test, y_train, y_test = perform_feature_engineering(df)
-        print("BEGIN TRAINING")
         cv_rfc, lrc = train_models(X_train, X_test, y_train, y_test)
-        print("FINISHED TRAINING")
         y_train_preds_rf, y_test_preds_rf, y_train_preds_lr, y_test_preds_lr = model_prediction(cv_rfc, lrc, X_train, X_test)
         classification_report_image(y_train,
                                 y_test,
@@ -287,24 +290,3 @@ if __name__=="__main__":
         
         X_data = prepare_xdata(df)
         feature_importance_plot(cv_rfc, X_data, feature_importance_path)
-
-
-
-
-
-
-
-# Comments      
-# """" -- done
-# images/eda -- done
-# images results -- done
-# paths to constants.py -- done
-# unit tests
-# Readme
-# Logging
-# tree explainer bug -- done
-# martial status bug -- done
-# classification reports bug -- done
-# author date
-# comments
-

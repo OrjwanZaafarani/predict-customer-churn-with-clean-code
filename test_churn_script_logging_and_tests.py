@@ -1,4 +1,9 @@
-'''This module tests all the functions in churn_library.py'''
+'''
+This module tests all the functions in churn_library.py
+
+Author: Orjuwan Zaafarani
+Date: 3/3/2023
+'''
 
 import os
 import pytest
@@ -6,7 +11,7 @@ import logging
 from churn_library import *
 from constants import *
 
-####### Configs #######
+##################### Configs #####################
 os.environ['QT_QPA_PLATFORM'] = 'offscreen'
 
 for handler in logging.root.handlers[:]:
@@ -19,7 +24,7 @@ logging.basicConfig(
     format='%(name)s - %(levelname)s - %(message)s')
 
 
-####### Fixtures #######
+##################### Fixtures #####################
 @pytest.fixture(scope="module")
 def df():
 	df = pd.read_csv(dataset_path)
@@ -51,7 +56,7 @@ def y_test(encoder):
 	_, _, _, y_test = perform_feature_engineering(encoder)
 	return y_test
 
-####### Unit tests #######
+##################### Unit tests #####################
 @pytest.mark.parametrize("filename",
                          [dataset_path,
 						 "data/no_file.csv"])
