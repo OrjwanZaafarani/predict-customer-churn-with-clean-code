@@ -27,8 +27,8 @@ logging.basicConfig(
 
 
 ##################### Fixtures #####################
-@pytest.fixture(scope="module")
-def load_df():
+@pytest.fixture(scope="module", name="load_df")
+def fixture_load_df():
     '''Fixture for loading the dataframe and adding the Churn column'''
     data_frame = pd.read_csv(dataset_path)
     data_frame['Churn'] = data_frame['Attrition_Flag'].apply(
@@ -36,35 +36,35 @@ def load_df():
     return data_frame
 
 
-@pytest.fixture(scope="module")
-def encoder(load_df):
+@pytest.fixture(scope="module", name="encoder")
+def fixture_encoder(load_df):
     '''Fixture for encoding the categorical columns'''
     return encoder_helper(load_df, cat_columns)
 
 
-@pytest.fixture(scope="module")
-def x_features_train(encoder):
+@pytest.fixture(scope="module", name="x_features_train")
+def fixture_x_features_train(encoder):
     '''Fixture for retrieving x_train'''
     x_train, _, _, _ = perform_feature_engineering(encoder)
     return x_train
 
 
-@pytest.fixture(scope="module")
-def x_features_test(encoder):
+@pytest.fixture(scope="module", name="x_features_test")
+def fixture_x_features_test(encoder):
     '''Fixture for retrieving x_test'''
     _, x_test, _, _ = perform_feature_engineering(encoder)
     return x_test
 
 
-@pytest.fixture(scope="module")
-def y_vector_train(encoder):
+@pytest.fixture(scope="module", name="y_vector_train")
+def fixture_y_vector_train(encoder):
     '''Fixture for retrieving y_train'''
     _, _, y_train, _ = perform_feature_engineering(encoder)
     return y_train
 
 
-@pytest.fixture(scope="module")
-def y_vector_test(encoder):
+@pytest.fixture(scope="module", name="y_vector_test")
+def fixture_y_vector_test(encoder):
     '''Fixture for retrieving y_test'''
     _, _, _, y_test = perform_feature_engineering(encoder)
     return y_test
@@ -98,7 +98,7 @@ def test_eda(load_df):
     test perform eda function
     '''
     try:
-        assert all([item in load_df.columns for item in eda_columns])
+        assert all(item in load_df.columns for item in eda_columns)
         perform_eda(load_df)
         logging.info("Testing perform_eda: SUCCESS")
     except AssertionError as err:
@@ -112,7 +112,7 @@ def test_encoder_helper(load_df):
     test encoder helper
     '''
     try:
-        assert all([item in load_df.columns for item in cat_columns])
+        assert all(item in load_df.columns for item in cat_columns)
         _ = encoder_helper(load_df, cat_columns)
         logging.info("Testing encoder_helper: SUCCESS")
     except AssertionError as err:
@@ -127,7 +127,7 @@ def test_perform_feature_engineering(encoder):
     test perform_feature_engineering
     '''
     try:
-        assert all([item in encoder.columns for item in keep_cols])
+        assert all(item in encoder.columns for item in keep_cols)
         _, _, _, _ = perform_feature_engineering(encoder)
         logging.info("Testing perform_feature_engineering: SUCCESS")
     except AssertionError as err:
