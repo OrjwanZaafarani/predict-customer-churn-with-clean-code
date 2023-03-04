@@ -1,3 +1,5 @@
+[![Documentation](https://img.shields.io/badge/read-DOCUMENTATION-brightgreen)](https://orjwanzaafarani.github.io/predict-customer-churn-with-clean-code/churn_library.html) 
+
 # Predict Customer Churn
 
 This is the first project "**Predict Customer Churn**" of the ML DevOps Engineer Nanodegree by Udacity.
