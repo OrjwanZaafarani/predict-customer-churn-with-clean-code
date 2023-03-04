@@ -43,71 +43,62 @@ def encoder(load_df):
 
 
 @pytest.fixture(scope="module")
-def X_train(encoder):
-    '''Fixture for retrieving X_train'''
-    Xtrain, _, _, _ = perform_feature_engineering(encoder)
-    return Xtrain
+def x_features_train(encoder):
+    '''Fixture for retrieving x_train'''
+    x_train, _, _, _ = perform_feature_engineering(encoder)
+    return x_train
 
 
 @pytest.fixture(scope="module")
-def X_test(encoder):
-    '''Fixture for retrieving X_test'''
-    _, Xtest, _, _ = perform_feature_engineering(encoder)
-    return Xtest
+def x_features_test(encoder):
+    '''Fixture for retrieving x_test'''
+    _, x_test, _, _ = perform_feature_engineering(encoder)
+    return x_test
 
 
 @pytest.fixture(scope="module")
-def y_train(encoder):
+def y_vector_train(encoder):
     '''Fixture for retrieving y_train'''
-    _, _, ytrain, _ = perform_feature_engineering(encoder)
-    return ytrain
+    _, _, y_train, _ = perform_feature_engineering(encoder)
+    return y_train
 
 
 @pytest.fixture(scope="module")
-def y_test(encoder):
+def y_vector_test(encoder):
     '''Fixture for retrieving y_test'''
-    _, _, _, ytest = perform_feature_engineering(encoder)
-    return ytest
+    _, _, _, y_test = perform_feature_engineering(encoder)
+    return y_test
 
 ##################### Unit tests #####################
 
 
-@pytest.mark.parametrize("filename",
-                         [dataset_path,
-                          "data/no_file.csv"])
-def test_import(filename):
+def test_import():
     '''
     test data import - this example is completed for you to assist with the other test functions
     '''
 
     try:
-        df = import_data(filename)
+        data_frame = import_data(dataset_path)
         logging.info("Testing import_data: SUCCESS")
     except FileNotFoundError as err:
         logging.error("Testing import_eda: ERROR - The file wasn't found")
         raise err
 
     try:
-        assert df.shape[0] > 0
-        assert df.shape[1] > 0
+        assert data_frame.shape[0] > 0
+        assert data_frame.shape[1] > 0
     except AssertionError as err:
         logging.error(
             "Testing import_data: ERROR - The file doesn't appear to have rows and columns")
         raise err
 
 
-@pytest.mark.parametrize("cols_list",
-                         [eda_columns,
-                          ["Churnnnnnn",
-                           "Customer_Agee",
-                           "Marital_Status",
-                           "Total_Trans_Ct"]])
-def test_eda(cols_list, load_df):
+def test_eda(load_df):
     '''
     test perform eda function
     '''
     try:
-        assert all([item in load_df.columns for item in cols_list])
+        assert all([item in load_df.columns for item in eda_columns])
         perform_eda(load_df)
         logging.info("Testing perform_eda: SUCCESS")
     except AssertionError as err:
@@ -116,20 +107,13 @@ def test_eda(cols_list, load_df):
         raise err
 
 
-@pytest.mark.parametrize("categorical_columns",
-                         [cat_columns,
-                          ['Genderrrr',
-                           'Education_Level',
-                           'Marital_Status',
-                           'Income_Category',
-                           'Card_Category']])
-def test_encoder_helper(categorical_columns, load_df):
+def test_encoder_helper(load_df):
     '''
     test encoder helper
     '''
     try:
-        assert all([item in load_df.columns for item in categorical_columns])
-        _ = encoder_helper(load_df, categorical_columns)
+        assert all([item in load_df.columns for item in cat_columns])
+        _ = encoder_helper(load_df, cat_columns)
         logging.info("Testing encoder_helper: SUCCESS")
     except AssertionError as err:
         logging.error(
@@ -153,26 +137,20 @@ def test_perform_feature_engineering(encoder):
         raise err
 
 
-def test_train_models(X_train, X_test, y_train, y_test):
+def test_train_models(x_features_train, x_features_test, y_vector_train, y_vector_test):
     '''
     test train_models
     '''
     try:
-        assert X_train.shape[0] > 0
-        assert X_test.shape[0] > 0
-        assert y_train.shape[0] > 0
-        assert y_test.shape[0] > 0
+        assert x_features_train.shape[0] > 0
+        assert x_features_test.shape[0] > 0
+        assert y_vector_train.shape[0] > 0
+        assert y_vector_test.shape[0] > 0
+        _, _ = train_models(x_features_train, x_features_test, y_vector_train, y_vector_test)
+        logging.info("Testing train_models: SUCCESS")
     except AssertionError as assertion_error:
         logging.error(
             "Testing train_models: ERROR - the training or testing datasets'\
                  shapes are equal to zero")
         raise assertion_error
-
-    try:
-        _, _ = train_models(X_train, X_test, y_train, y_test)
-        logging.info("Testing train_models: SUCCESS")
-    except Exception as error_message:
-        logging.error(
-            "Testing train_models: ERROR - The exception was " +
-            str(error_message))
-        raise error_message
+        

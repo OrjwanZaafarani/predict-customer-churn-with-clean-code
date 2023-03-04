@@ -33,6 +33,7 @@ def import_data(pth):
 
     input:
             pth: a path to the csv
+
     output:
             data_frame: pandas dataframe
     '''
@@ -45,6 +46,7 @@ def import_data(pth):
 def perform_eda(data_frame):
     '''
     perform eda on data_frame and save figures to images folder
+
     input:
             data_frame: pandas dataframe
 
@@ -121,6 +123,7 @@ def classification_report_image(y_train,
     '''
     produces classification report for training and testing results and stores report as image
     in images folder
+
     input:
             y_train: training response values
             y_test:  test response values
@@ -161,6 +164,7 @@ def classification_report_image(y_train,
 def feature_importance_plot(model, X_data, output_pth):
     '''
     creates and stores the feature importances in pth
+
     input:
             model: model object containing feature_importances_
             X_data: pandas dataframe of X values
@@ -197,6 +201,7 @@ def feature_importance_plot(model, X_data, output_pth):
 def train_models(X_train, X_test, y_train, y_test):
     '''
     train, store model results: images + scores, and store models
+    
     input:
             X_train: X training data
             X_test: X testing data
