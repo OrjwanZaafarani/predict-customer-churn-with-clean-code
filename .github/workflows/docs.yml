@@ -24,7 +24,7 @@ jobs:
           python-version: '3.8'
 
       # ADJUST THIS: install all dependencies (including pdoc)
-      - run: pip install -r requirements3.8.tat 
+      - run: pip install -r requirements3.8.txt 
       # ADJUST THIS: build your documentation into docs/.
       # We use a custom build script for pdoc itself, ideally you just run `pdoc -o docs/ ...` here.
       - run: python -m pdoc -o docs/ churn_library.py
